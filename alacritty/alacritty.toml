@@ -1,0 +1,42 @@
+[window]
+# Añade píxeles de espacio libre (x = laterales, y = superior e inferior)
+padding = { x = 20, y = 1 }
+
+# Distribuye los espacios sobrantes de forma inteligente en rejilla
+dynamic_padding = true
+
+# Transforma la tecla Option de Mac en Alt para que Neovim la reconozca
+option_as_alt = "Both"
+
+[selection]
+# Copia automáticamente cualquier selección de ratón al portapapeles global
+save_to_clipboard = true
+
+[font]
+normal = { family = "JetBrainsMono Nerd Font", style = "Regular" }
+bold = { family = "JetBrainsMono Nerd Font", style = "Bold" }
+
+# Ajusta este valor numérico (admite decimales) a tu gusto:
+size = 14.0
+
+# Permite desplazarlos con Alt y Control entre palabras
+#[[keyboard.bindings]]
+#key = "Left"
+#mods = "Control"
+#chars = "\u001Bb"
+#
+#[[keyboard.bindings]]
+#key = "Right"
+#mods = "Control"
+#chars = "\u001Bf"
+
+[[keyboard.bindings]]
+key = "Left"
+mods = "Alt"
+chars = "\u001Bb"
+
+[[keyboard.bindings]]
+key = "Right"
+mods = "Alt"
+chars = "\u001Bf"
+
