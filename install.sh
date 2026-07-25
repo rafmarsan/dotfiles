@@ -40,3 +40,6 @@ echo "Deploying symlinks..."
 
 # Checks
 ./install/checks.sh
+
+echo "Set zsh as default shell"
+chsh -s "$(which zsh)"
