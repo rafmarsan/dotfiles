@@ -1,10 +1,17 @@
-alias ls='ls -G'
-alias mp=multipass
+case "$(uname -s)" in
+    Darwin)
+        alias ls='ls -G'
+        ;;
+    Linux)
+        alias ls='ls --color=auto'
+        ;;
+esac
+
 alias pip=pip3
 alias py=python3
 alias k='kubectl --insecure-skip-tls-verify'
 alias t=terraform
 alias mrw='. ~/Documents/DevOps/Python/rewards/bin/activate; py ~/Documents/DevOps/Python/rewards/rewards.py'
-alias god='cd /Users/bronzeqq/Downloads'
-alias gor='cd /Users/bronzeqq/Repos'
+alias gor='cd ~/Repos'
+alias god='cd ~/Downloads'
 alias godot='/Applications/Godot.app/Contents/MacOS/Godot'

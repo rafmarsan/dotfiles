@@ -52,4 +52,6 @@ if ! grep -qx "$ZSH_PATH" /etc/shells; then
     echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
 fi
 
-chsh -s "$ZSH_PATH"
+if [[ "$SHELL" != "$ZSH_PATH" ]]; then
+    chsh -s "$ZSH_PATH"
+fi
