@@ -22,10 +22,13 @@ case "$(uname -s)" in
 esac
 
 # Startship
-curl -sS https://starship.rs/install.sh | sh
+if ! command -v starship >/dev/null 2>&1; then
+    curl -sS https://starship.rs/install.sh | sh
+fi
 
 # Golang LS
 go install golang.org/x/tools/gopls@latest
+export PATH="$HOME/go/bin:$PATH"
 
 # Ansible and Python LS
 uv tool install ansible-core==2.16.14

@@ -7,7 +7,9 @@ mkdir -p ~/.config
 
 ln -snf "$SCRIPT_DIR/nvim" ~/.config/nvim
 ln -sf "$SCRIPT_DIR/zsh/.zshrc" ~/.zshrc
+ln -sf "$SCRIPT_DIR/zsh/.zshenv" ~/.zshenv
 ln -sf "$SCRIPT_DIR/zsh/.aliases.zsh" ~/.aliases.zsh
+
 ln -sf "$SCRIPT_DIR/git/.gitconfig" ~/.gitconfig
 
 ln -snf "$SCRIPT_DIR/alacritty" ~/.config/alacritty
