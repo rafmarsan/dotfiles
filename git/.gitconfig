@@ -1,0 +1,13 @@
+[user]
+    name = rafmarsan
+    email = rafmarsan.oficial@gmail.com
+
+[core]
+    autocrlf = input
+    editor = nvim
+
+[init]
+    defaultBranch = main
+
+[alias]
+    lg = log --oneline --graph --decorate
