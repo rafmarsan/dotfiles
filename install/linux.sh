@@ -2,6 +2,8 @@
 
 set -e
 
+sudo apt update && sudo apt install -y build-essential
+
 brew update
 
 brew install \
