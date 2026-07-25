@@ -28,6 +28,9 @@ uv tool install basedpyright
 # Ansible LS
 npm install -g @ansible/ansible-language-server
 
-# ---
+# Symlinks
+echo "Deploying symlinks..."
 ./install/links.sh
 
+# Checks
+./install/checks.sh

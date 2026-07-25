@@ -2,6 +2,8 @@
 
 set -e
 
+brew update
+
 brew install \
     git \
     neovim \
