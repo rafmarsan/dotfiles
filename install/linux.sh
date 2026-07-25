@@ -5,6 +5,7 @@ set -e
 brew update
 
 brew install \
+    zsh \
     git \
     neovim \
     tmux \
