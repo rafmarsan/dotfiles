@@ -1,5 +1,6 @@
 # .zshrc
-source "${0:A:h}/aliases.zsh"
+
+source ~/.aliases.zsh
 
 autoload -U +X compinit && compinit
 autoload -U +X bashcompinit && bashcompinit
