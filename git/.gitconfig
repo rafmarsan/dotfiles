@@ -9,5 +9,12 @@
 [init]
     defaultBranch = main
 
+[pull]
+    rebase = true
+
+[rebase]
+    autoStash = true
+
 [alias]
     lg = log --oneline --graph --decorate
+    sync = !"git fetch origin && git reset --hard @{u} && git clean -fd"
