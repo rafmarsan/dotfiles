@@ -1,11 +1,47 @@
 # Dotfiles
 
-## Install
+## Requirements
 
-1. Run `install.sh`
+- Install [Alacritty](https://alacritty.org/)
 
-9. Symb link creation:
+## Installation
+
+```bash
+./install.sh
 ```
-ls -n <origin> <dest>
+
+## Windows (WSL)
+
+If you use **Alacritty for Windows** with WSL, the terminal configuration must live on the Windows side.
+
+1. Install the Nerd Font:
+
+```powershell
+winget install DEVCOM.JetBrainsMonoNerdFont
 ```
 
+2. Copy:
+
+```text
+%APPDATA%\alacritty\alacritty.toml
+```
+
+from:
+
+```text
+dotfiles/alacritty/alacritty.toml
+```
+
+## Included
+
+- Neovim
+- Tmux
+- Zsh
+- Alacritty
+- Git
+- Homebrew (macOS/Linux)
+- LSPs
+  - gopls
+  - lua-language-server
+  - basedpyright
+  - ansible-language-server
