@@ -42,7 +42,7 @@ install_starship() {
     if command -v starship >/dev/null 2>&1; then
         return
     fi
-    curl -sS https://starship.rs/install.sh | sh -s -- -y -b /usr/local/bin
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
 }
 
 install_uv() {
