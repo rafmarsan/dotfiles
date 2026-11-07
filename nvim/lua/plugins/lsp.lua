@@ -1,5 +1,27 @@
 return {
   {
+    "williamboman/mason.nvim",
+    config = function()
+      require("mason").setup()
+    end,
+  },
+  {
+    "williamboman/mason-lspconfig.nvim",
+    config = function()
+      require("mason-lspconfig").setup({
+        -- Aquí le dices a Mason que te asegure estos servidores en Fedora o Mac
+        ensure_installed = { 
+          "lua_ls", 
+          "basedpyright", 
+          "gopls", 
+          "yamlls", 
+          "ansiblels" 
+        },
+      })
+    end,
+  },
+
+  {
     "neovim/nvim-lspconfig",
     lazy = false,
 

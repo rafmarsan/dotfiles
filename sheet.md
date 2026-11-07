@@ -210,9 +210,9 @@ En modo Visual:
 
 #### Telescope
 
-* **`<leader>f`** : Busca ficheros en el proyecto 
-* **`<leader>g`** : Hace un grep entre los ficheros del proyecto
-* **`<leader>b`** : Abre el listado de buffers 
+* **`<leader>ff`** : Busca ficheros en el proyecto 
+* **`<leader>fg`** : Hace un grep entre los ficheros del proyecto
+* **`<leader>fb`** : Abre el listado de buffers 
 
 #### Neotree
 
