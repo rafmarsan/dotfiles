@@ -55,6 +55,9 @@ Core tools such as `git`, `zsh` and `tmux` are always kept, even with
   requirements, so the official upstream releases are installed under
   `/usr/local`.
 - `glow` is installed from the official Charm repository on Debian.
+- `kubectl` is installed from the official Kubernetes repositories. The
+  current stable minor version is resolved automatically, so nothing is
+  hardcoded.
 - `starship` is installed from the official installer on Fedora.
 - `uv` is installed with its official installer and is used for Python
   projects and `ansible-core`.

@@ -70,20 +70,41 @@ install_neovim_upstream() {
     rm -rf "$tmp"
 }
 
-install_kubectl_upstream() {
-    local arch tmp version
-    case "$(uname -m)" in
-        x86_64|amd64) arch="amd64" ;;
-        aarch64|arm64) arch="arm64" ;;
-        *) echo "Unsupported architecture: $(uname -m)" >&2; exit 1 ;;
-    esac
+kubernetes_minor() {
+    curl -fsSL https://dl.k8s.io/release/stable.txt | cut -d. -f1-2
+}
 
-    tmp="$(mktemp -d)"
-    version="$(curl -fsSL https://dl.k8s.io/release/stable.txt)"
-    curl -fL "https://dl.k8s.io/release/${version}/bin/linux/${arch}/kubectl" \
-        -o "$tmp/kubectl"
-    sudo install -m 0755 "$tmp/kubectl" /usr/local/bin/kubectl
-    rm -rf "$tmp"
+install_kubectl_debian() {
+    local minor
+    minor="$(kubernetes_minor)"
+
+    sudo mkdir -p -m 755 /etc/apt/keyrings
+    curl -fsSL "https://pkgs.k8s.io/core:/stable:/${minor}/deb/Release.key" \
+        | sudo gpg --dearmor --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    sudo chmod 644 /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/${minor}/deb/ /" \
+        | sudo tee /etc/apt/sources.list.d/kubernetes.list >/dev/null
+    sudo chmod 644 /etc/apt/sources.list.d/kubernetes.list
+
+    sudo apt-get update
+    sudo apt-get install -y kubectl
+}
+
+install_kubectl_fedora() {
+    local minor
+    minor="$(kubernetes_minor)"
+
+    cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo >/dev/null
+[kubernetes]
+name=Kubernetes
+baseurl=https://pkgs.k8s.io/core:/stable:/${minor}/rpm/
+enabled=1
+gpgcheck=1
+gpgkey=https://pkgs.k8s.io/core:/stable:/${minor}/rpm/repodata/repomd.xml.key
+EOF
+
+    sudo dnf install -y --allowerasing kubectl
 }
 
 install_tree_sitter_cli_upstream() {
@@ -163,12 +184,7 @@ install_debian() {
 
     sudo ln -sfn /usr/bin/fdfind /usr/local/bin/fd
 
-    if apt-cache show kubectl >/dev/null 2>&1; then
-        sudo apt-get install -y kubectl
-    elif ! command -v kubectl >/dev/null 2>&1; then
-        install_kubectl_upstream
-    fi
-
+    install_kubectl_debian
     install_glow_debian
 
     if apt-cache show starship >/dev/null 2>&1; then
@@ -195,11 +211,11 @@ install_fedora() {
         alacritty \
         neovim \
         golang \
-        kubernetes1.36-client \
         tree-sitter-cli \
         unzip \
         fontconfig
 
+    install_kubectl_fedora
     install_glow_fedora
 
     if dnf info nodejs >/dev/null 2>&1; then
@@ -232,7 +248,11 @@ uninstall_common_linux() {
 uninstall_debian() {
     uninstall_common_linux
 
-    sudo rm -f /etc/apt/keyrings/charm.gpg /etc/apt/sources.list.d/charm.list
+    sudo rm -f \
+        /etc/apt/keyrings/charm.gpg \
+        /etc/apt/sources.list.d/charm.list \
+        /etc/apt/keyrings/kubernetes-apt-keyring.gpg \
+        /etc/apt/sources.list.d/kubernetes.list
     sudo apt-get remove -y \
         build-essential \
         tree \
@@ -256,7 +276,7 @@ uninstall_debian() {
 uninstall_fedora() {
     uninstall_common_linux
 
-    sudo rm -f /etc/yum.repos.d/charm.repo
+    sudo rm -f /etc/yum.repos.d/charm.repo /etc/yum.repos.d/kubernetes.repo
     sudo dnf remove -y \
         gcc \
         gcc-c++ \
@@ -269,7 +289,7 @@ uninstall_fedora() {
         alacritty \
         neovim \
         golang \
-        kubernetes1.36-client \
+        kubectl \
         tree-sitter-cli \
         glow \
         starship \
