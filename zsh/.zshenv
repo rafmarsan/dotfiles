@@ -1,16 +1,18 @@
-# Homebrew
-for BREW in \
-    /opt/homebrew/bin/brew \
-    /home/linuxbrew/.linuxbrew/bin/brew
-do
-    if [[ -x "$BREW" ]]; then
-        eval "$("$BREW" shellenv)"
-        break
-    fi
-done
+# Homebrew (macOS)
+if [[ "$(uname -s)" == "Darwin" ]]; then
+    for BREW in \
+        /opt/homebrew/bin/brew \
+        /usr/local/bin/brew
+    do
+        if [[ -x "$BREW" ]]; then
+            eval "$("$BREW" shellenv)"
+            break
+        fi
+    done
+fi
 
-# uv
+# uv and Python tools
 export PATH="$HOME/.local/bin:$PATH"
 
-# go
+# Go
 export PATH="$HOME/go/bin:$PATH"

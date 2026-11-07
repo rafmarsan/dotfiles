@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 FAILED=0
+OS="$(uname -s)"
 
 GREEN="\033[0;32m"
 RED="\033[0;31m"
@@ -28,7 +29,11 @@ check_link() {
 echo
 printf "${BLUE}== Commands ==${RESET}\n\n"
 
-check_cmd brew
+if [[ "$OS" == "Darwin" ]]; then
+    check_cmd brew
+fi
+
+check_cmd zsh
 check_cmd git
 check_cmd nvim
 check_cmd tmux
@@ -39,25 +44,24 @@ check_cmd rg
 check_cmd watch
 check_cmd entr
 check_cmd glow
+check_cmd starship
 
 check_cmd go
-check_cmd gopls
 
 check_cmd node
 check_cmd npm
 
 check_cmd uv
-check_cmd basedpyright
-
 check_cmd ansible
 check_cmd ansible-playbook
 check_cmd ansible-galaxy
 
-check_cmd ansible-language-server
-check_cmd lua-language-server
 check_cmd kubectl
 check_cmd tree-sitter
 
+if [[ "$OS" == "Linux" ]]; then
+    check_cmd alacritty
+fi
 
 echo
 printf "${BLUE}== Symlinks ==${RESET}\n\n"
@@ -66,6 +70,7 @@ check_link ~/.config/nvim
 check_link ~/.config/alacritty
 check_link ~/.config/tmux
 check_link ~/.zshrc
+check_link ~/.zshenv
 check_link ~/.aliases.zsh
 check_link ~/.gitconfig
 

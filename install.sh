@@ -2,51 +2,108 @@
 
 set -e
 
-if ! command -v brew >/dev/null 2>&1; then
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+MODE="install"
+ASSUME_YES=0
+PURGE=0
 
-if [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
-    eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-elif [[ -x /opt/homebrew/bin/brew ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+for arg in "$@"; do
+    case "$arg" in
+        --uninstall)
+            MODE="uninstall"
+            ;;
+        --purge)
+            PURGE=1
+            ;;
+        --yes|-y)
+            ASSUME_YES=1
+            ;;
+        *)
+            echo "Unknown option: $arg" >&2
+            exit 1
+            ;;
+    esac
+done
+
+if [[ "$MODE" == "uninstall" ]]; then
+    if [[ $ASSUME_YES -eq 0 ]]; then
+        if [[ $PURGE -eq 1 ]]; then
+            echo "This will remove dotfiles symlinks, extra packages, binaries and user data."
+        else
+            echo "This will remove only the symlinked dotfiles configuration."
+        fi
+        read -r -p "Continue? [y/N] " answer
+        case "$answer" in
+            [yY]|[yY][eE][sS]) ;;
+            *) echo "Aborted."; exit 0 ;;
+        esac
+    fi
+
+    if [[ $PURGE -eq 1 ]]; then
+        if [[ "$(uname -s)" == "Darwin" ]]; then
+            if [[ -x /opt/homebrew/bin/brew ]]; then
+                eval "$(/opt/homebrew/bin/brew shellenv)"
+            elif [[ -x /usr/local/bin/brew ]]; then
+                eval "$(/usr/local/bin/brew shellenv)"
+            fi
+        fi
+
+        case "$(uname -s)" in
+            Darwin)
+                "$SCRIPT_DIR/install/macos.sh" --uninstall
+                ;;
+            Linux)
+                "$SCRIPT_DIR/install/linux.sh" --uninstall
+                ;;
+        esac
+
+        rm -rf "$HOME/.local/share/nvim" "$HOME/.local/state/nvim" "$HOME/.cache/nvim"
+        rm -rf "$HOME/.local/share/uv" "$HOME/.local/state/uv" "$HOME/.cache/uv"
+        rm -f "$HOME/.local/bin/uv" "$HOME/.local/bin/uvx"
+        rm -f "$HOME/.local/bin/ansible" "$HOME/.local/bin/ansible-"*
+        rm -rf "$HOME/.local/share/fonts/JetBrainsMono"
+    fi
+
+    "$SCRIPT_DIR/install/links.sh" --uninstall
+
+    echo "Uninstall complete."
+    exit 0
 fi
 
 case "$(uname -s)" in
     Darwin)
-        ./install/macos.sh
+        if ! command -v brew >/dev/null 2>&1; then
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+
+        if [[ -x /opt/homebrew/bin/brew ]]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [[ -x /usr/local/bin/brew ]]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+
+        "$SCRIPT_DIR/install/macos.sh"
         ;;
     Linux)
-        ./install/linux.sh
+        "$SCRIPT_DIR/install/linux.sh"
         ;;
 esac
 
-# Startship
-if ! command -v starship >/dev/null 2>&1; then
-    curl -sS https://starship.rs/install.sh | sh
-fi
+export PATH="$HOME/.local/bin:$HOME/go/bin:$PATH"
 
-# Golang LS
-go install golang.org/x/tools/gopls@latest
-export PATH="$HOME/go/bin:$PATH"
-
-# Ansible and Python LS
-uv tool install ansible-core==2.16.14
-uv tool install basedpyright
-
-# Ansible LS
-npm install -g @ansible/ansible-language-server
+# Ansible
+uv tool install --python 3.12 ansible-core==2.16.14
 
 # Symlinks
 echo "Deploying symlinks..."
-./install/links.sh
+"$SCRIPT_DIR/install/links.sh"
 
 # Checks
-./install/checks.sh
+"$SCRIPT_DIR/install/checks.sh"
 
 echo
 echo "Set zsh as default shell"
-ZSH_PATH="$(which zsh)"
+ZSH_PATH="$(command -v zsh)"
 
 if ! grep -qx "$ZSH_PATH" /etc/shells; then
     echo "$ZSH_PATH" | sudo tee -a /etc/shells >/dev/null
