@@ -2,6 +2,13 @@
 # Añade píxeles de espacio libre (x = laterales, y = superior e inferior)
 padding = { x = 20, y = 1 }
 
+# Elimina la barra superior y decoradores de ventana
+decorations = "None"
+
+# Usa "Fullscreen" para pantalla completa total (ocupa toda la pantalla)
+# Usa "Maximized" si quieres que se maximice respetando los paneles de Fedora
+startup_mode = "Fullscreen"
+
 # Distribuye los espacios sobrantes de forma inteligente en rejilla
 dynamic_padding = true
 
