@@ -230,6 +230,13 @@ En modo Visual:
 * **`Ctrl + o`** : Volver después de un salto LSP (`gd`, referencias, etc.).
 * **`Ctrl + i`** : Avanzar de nuevo en la lista de saltos.
 
+#### FZF (Fuzzy Finder)
+
+* **`Ctrl + r`** : Buscar comandos en el historial de forma interactiva y difusa.
+* **`Ctrl + t`** : Buscar y pegar archivos del directorio actual en la línea de comandos.
+* **`Alt + c`** : Hacer `cd` interactivo a una subcarpeta mediante el menú visual.
+* **`** + Tab`** : Activar el autocompletado inteligente en comandos (`cd`, `vim`, `kill`, `ssh`).
+
 
 ### 🖥️ CAPA 4: EL SISTEMA OPERATIVO HOST (macOS) 
 * **`Control + Número (1-9)`** : Salta instantáneamente a ese escritorio virtual en tu Mac sin usar el trackpad ni pasar por Mission Control [^1].

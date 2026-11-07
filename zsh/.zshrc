@@ -11,3 +11,4 @@ bindkey "^[b" backward-word
 bindkey "^[f" forward-word
 
 eval "$(starship init zsh)"
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
