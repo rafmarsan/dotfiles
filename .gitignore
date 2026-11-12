@@ -1,3 +1,5 @@
 .DS_Store
 *.log
 lazy-lock.json
+tmux/plugins
+
